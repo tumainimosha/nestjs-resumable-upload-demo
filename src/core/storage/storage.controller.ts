@@ -11,12 +11,12 @@ export class StorageController {
     ) { }
 
     @All('files')
-    tus(@Req() req, @Res() res) {
+    async tus(@Req() req, @Res() res) {
         return this.tusService.handleTus(req, res);
     }
 
     @All('uppy-companion')
-    companion(@Req() req, @Res() res) {
+    async companion(@Req() req, @Res() res) {
         return this.uppyService.handleCompanion(req, res);
     }
 }

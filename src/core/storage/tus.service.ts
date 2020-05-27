@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import tus = require('tus-node-server');
 import { storageConfig } from 'src/config/storage.config';
 import { v4 as uuid } from 'uuid';
@@ -8,22 +8,28 @@ import { FileMetadata } from './models/file-metadata.model';
 @Injectable()
 export class TusService implements OnModuleInit {
 
+    private logger = new Logger('TusService');
+
     private readonly tusServer = new tus.Server();
 
     onModuleInit() {
-        console.log(`The Storage Module has been initialized.`);
+        this.initializeTusServer();
+    }
 
+    async handleTus(req, res) {
+        return this.tusServer.handle(req, res);
+    }
+
+    private initializeTusServer() {
+        this.logger.verbose(`Initializing Tus Server`);
         switch (storageConfig.storageDriver) {
             case 'local':
                 this.tusServer.datastore = new tus.FileStore({
                     path: '/local-store',
                     namingFunction: this.fileNameFromRequest,
                 });
-
                 break;
-
             case 's3':
-
                 this.tusServer.datastore = new tus.S3Store({
                     path: '/s3-store',
                     namingFunction: this.fileNameFromRequest,
@@ -31,18 +37,15 @@ export class TusService implements OnModuleInit {
                     accessKeyId: storageConfig.accessKeyId,
                     secretAccessKey: storageConfig.secretAccessKey,
                     region: storageConfig.region,
-                    partSize: 8 * 1024 * 1024, // each uploaded part will have ~8MB,
+                    partSize: 8 * 1024 * 1024,
                     tmpDirPrefix: 'tus-s3-store',
                 });
-
                 break;
-
             default:
                 throw 'Invalid storage driver' + storageConfig.storageDriver;
         }
-
         this.tusServer.on(tus.EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
-            console.log(`Upload complete for file ${JSON.stringify(event.file)}`);
+            this.logger.verbose(`Upload complete for file ${JSON.stringify(event.file)}`);
         });
     }
 
@@ -56,7 +59,7 @@ export class TusService implements OnModuleInit {
 
             return fileName;
         } catch (e) {
-            console.error(e);
+            this.logger.error(e);
 
             // rethrow error
             throw e;
@@ -79,10 +82,6 @@ export class TusService implements OnModuleInit {
         metadata.extension = extension;
 
         return metadata;
-    }
-
-    handleTus(req, res) {
-        return this.tusServer.handle(req, res);
     }
 
 }
