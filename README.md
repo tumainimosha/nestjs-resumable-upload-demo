@@ -56,3 +56,5 @@ Below are some material I found helpful when researching use of Tus Protocol for
 - JSConfUS 2013 Talk on Tus.io https://www.youtube.com/watch?v=ilCxWswGm1I
 
 - Can TUSD run in AWS Lambda - NO https://github.com/tus/tusd/issues/291
+
+- Uppy AWS S3 Multipart https://uppy.io/docs/aws-s3-multipart/
