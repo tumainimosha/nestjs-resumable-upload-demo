@@ -6,7 +6,7 @@ import { FileMetadata } from './models/file-metadata.model';
 
 
 @Injectable()
-export class StorageService implements OnModuleInit {
+export class TusService implements OnModuleInit {
 
     private readonly tusServer = new tus.Server();
 

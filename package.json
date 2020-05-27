@@ -25,11 +25,13 @@
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/serve-static": "^2.1.1",
+    "@uppy/companion": "^2.0.0-alpha.3",
     "dotenv": "^8.2.0",
     "helmet": "^3.22.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "temp-dir": "^2.0.0",
     "tus-node-server": "^0.3.2"
   },
   "devDependencies": {

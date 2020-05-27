@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>NestJs Resumable S3 Upload Example</title>
+
+    <!-- Uppy Uploader CSS -->
+    <link
+      href="https://transloadit.edgly.net/releases/uppy/v1.15.0/uppy.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <h1>NestJs Resumable S3 Upload Example</h1>
+    <!-- <input type="file" name="upload" /> -->
+
+    <div class="grid">
+      <div class="column-full">
+        <div class="UppyInput"></div>
+        <div class="UppyInput-Progress"></div>
+      </div>
+    </div>
+
+    <!-- Uppy Uploader JS -->
+    <script src="https://transloadit.edgly.net/releases/uppy/v1.15.0/uppy.min.js"></script>
+    <script>
+      var uppy = Uppy.Core()
+        .use(Uppy.Dashboard, {
+          inline: true,
+          target: '.UppyInput',
+        })
+        .use(Uppy.AwsS3Multipart, {
+          limit: 4,
+          companionUrl: 'http://127.0.0.1:3000/uppy-companion/',
+        });
+      //.use(Uppy.Tus, { endpoint: 'http://127.0.0.1:3000/files/' });
+
+      uppy.on('complete', result => {
+        console.log(
+          'Upload complete! We’ve uploaded these files:',
+          result.successful,
+        );
+      });
+    </script>
+  </body>
+</html>
